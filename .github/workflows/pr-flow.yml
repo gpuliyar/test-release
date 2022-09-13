@@ -1,0 +1,22 @@
+on:
+  workflow_dispatch:
+    inputs:
+      pr-number:
+        description: Pull Request number to deploy to Staging Kubernetes Cluster
+        required: true
+        type: string
+
+jobs:
+  pr-pre-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - id: get-sha
+      uses: gpuliyar/get-pr-sha@main
+      with:
+        repository: ${{ github.repository }}
+        pr-number: ${{ github.event.inputs.pr-number }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - run: echo ${{ steps.get-sha.outputs.sha }}
